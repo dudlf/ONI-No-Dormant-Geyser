@@ -1,13 +1,10 @@
 ﻿using Harmony;
-using PeterHan.PLib.Options;
-using System;
-using System.Linq;
 
 namespace NoDormantGeyser
 {
-    public static class MainPatch
+    public static class NoDormantGeyserPatch
     {
-        public static bool disable = false;
+        public static bool disabled = false;
 
         [HarmonyPatch(typeof(GeyserConfigurator.GeyserInstanceConfiguration))]
         [HarmonyPatch("GetYearPercent")]
@@ -16,9 +13,10 @@ namespace NoDormantGeyser
             [HarmonyPostfix]
             public static void Postfix(ref object __instance, ref float __result)
             {
-                var geyserType = ((GeyserConfigurator.GeyserInstanceConfiguration)__instance).geyserType;
-                if (!disable && !Config.IsExcluded(geyserType))
-                    __result = 1f;
+                if (disabled)
+                    return;
+
+                __result = 1f;
             }
         }
 
@@ -29,12 +27,12 @@ namespace NoDormantGeyser
             [HarmonyPostfix]
             public static void Postfix(ref object __instance, ref float ___scaledYearPercent, ref float ___scaledRate, ref float __result)
             {
-                var config = (GeyserConfigurator.GeyserInstanceConfiguration)__instance;
+                var geyserConfig = (GeyserConfigurator.GeyserInstanceConfiguration)__instance;
 
-                if (!disable && !Config.IsExcluded(config) && (!GeyserCrackingPatch.disable.ContainsKey(config) || !GeyserCrackingPatch.disable[config]))
-                {
-                    __result = ___scaledRate * ___scaledYearPercent;
-                }
+                if (disabled || GeyserCrackingPatch.IsGeyserCracking(geyserConfig))
+                    return;
+
+                __result = ___scaledRate * ___scaledYearPercent;
             }
         }
 
@@ -44,7 +42,7 @@ namespace NoDormantGeyser
             [HarmonyPrefix]
             public static void Prefix()
             {
-                disable = false;
+                disabled = false;
             }
         }
     }
