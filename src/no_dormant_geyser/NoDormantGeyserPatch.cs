@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 
 namespace NoDormantGeyser
 {
@@ -27,9 +27,7 @@ namespace NoDormantGeyser
             [HarmonyPostfix]
             public static void Postfix(ref object __instance, ref float ___scaledYearPercent, ref float ___scaledRate, ref float __result)
             {
-                var geyserConfig = (GeyserConfigurator.GeyserInstanceConfiguration)__instance;
-
-                if (disabled || GeyserCrackingPatch.IsGeyserCracking(geyserConfig))
+                if (disabled)
                     return;
 
                 __result = ___scaledRate * ___scaledYearPercent;
