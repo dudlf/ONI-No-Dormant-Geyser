@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
@@ -6,20 +6,16 @@ using System.Collections.Generic;
 namespace NoDormantGeyser
 {
     /*
-     *   temporary disable NoDormantGeyser mod when ths map sharing process begin
-     *   1825374565 is id of map sharing mod
      *   https://steamcommunity.com/sharedfiles/filedetails/?id=1825374565
      */
 
-    [HarmonyPatch]
-    [HarmonyAfter("1825374565.steam")]
+/*    [HarmonyPatch]
+    [HarmonyAfter("1825374565.steam")]*/
     public static class MapSharingPatch
     {
-        [HarmonyTargetMethods]
-        public static IEnumerable<MethodBase> TargetMethod(HarmonyInstance _)
+        public static IEnumerable<MethodBase> TargetMethods()
         {
-            var Utils = AccessTools.TypeByName("ToolsNotIncluded.ModCommon.CommonPatches+GeyserOnSpawn");
-
+            var Utils = AccessTools.TypeByName("ToolsNotIncluded.ModCommon.CommonPatches.GeyserOnSpawn");
             if (Utils == null)
                 yield break;
 
@@ -28,16 +24,16 @@ namespace NoDormantGeyser
             yield return postfix;
         }
 
-        [HarmonyPrefix]
+        /*[HarmonyPrefix]*/
         public static void Prefix()
         {
             NoDormantGeyserPatch.disabled = true;
         }
 
-        [HarmonyPostfix]
+        /*[HarmonyPostfix]*/
         public static void Postfix()
-        { 
+        {
             NoDormantGeyserPatch.disabled = false;
-        }
+        }   
     }
 }
