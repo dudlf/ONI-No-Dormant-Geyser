@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\ILMerge.3.0.29\build\ILMerge.props" Condition="Exists('packages\ILMerge.3.0.29\build\ILMerge.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>No_Dormant_Geyser</RootNamespace>
     <AssemblyName>No_Dormant_Geyser</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,55 +34,55 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
+    <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\vanilla\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\vanilla\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\vanilla\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="UnityEngine.CoreModule">
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\vanilla\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\no_dormant_geyser\mod_compatibility_path\GeyserCracking.cs" />
     <Compile Include="src\no_dormant_geyser\NoDormantGeyserPatch.cs" />
     <Compile Include="src\no_dormant_geyser\mod_compatibility_path\MapSharing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="src\mod_info.yaml" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="lib\vanilla\0Harmony.dll" />
+    <Analyzer Include="lib\vanilla\Assembly-CSharp-firstpass.dll" />
+    <Analyzer Include="lib\vanilla\Assembly-CSharp.dll" />
+    <Analyzer Include="lib\vanilla\UnityEngine.CoreModule.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>이 프로젝트는 이 컴퓨터에 없는 NuGet 패키지를 참조합니다. 해당 패키지를 다운로드하려면 NuGet 패키지 복원을 사용하십시오. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkID=322105를 참조하십시오. 누락된 파일은 {0}입니다.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\ILMerge.3.0.29\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\ILMerge.3.0.29\build\ILMerge.props'))" />
-  </Target>
   <PropertyGroup>
     <PostBuildEvent>taskkill -f -im "OxygenNotIncluded.exe"
 
 timeout 5
 
-"$(ILMergeConsolePath)" /log /allowDup /ndebug /out:"$(TargetName)"_Merged.dll "$(TargetName)".dll PLib.dll /targetplatform:v4,C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+@REM "$(ILMergeConsolePath)" /log /allowDup /ndebug /out:"$(TargetName)"_Merged.dll "$(TargetName)".dll PLib.dll /targetplatform:v4,C:\Windows\Microsoft.NET\Framework64\v4.0.30319
 
-mkdir -p "$(userprofile)\Documents\Klei\OxygenNotIncluded\mods\local\$(ProjectName)"
-copy /Y "$(TargetDir)$(TargetName)_Merged.dll" "$(userprofile)\Documents\Klei\OxygenNotIncluded\mods\local\$(ProjectName)"
-copy /Y "$(SolutionDir)\src\no_dormant_geyser\mod_info.yaml" "$(userprofile)\Documents\Klei\OxygenNotIncluded\mods\local\$(ProjectName)"
+mkdir -p "$(userprofile)\Documents\Klei\OxygenNotIncluded\mods\Dev\$(ProjectName)"
+copy /Y "$(TargetDir)$(TargetName).dll" "$(userprofile)\Documents\Klei\OxygenNotIncluded\mods\Dev\$(ProjectName)"
+copy /Y "$(SolutionDir)\src\mod_info.yaml" "$(userprofile)\Documents\Klei\OxygenNotIncluded\mods\Dev\$(ProjectName)"
 
 timeout 5
 
